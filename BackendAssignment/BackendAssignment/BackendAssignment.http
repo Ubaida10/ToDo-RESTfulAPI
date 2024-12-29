@@ -1,0 +1,45 @@
+@BackendAssignment_HostAddress = http://localhost:5177
+
+GET {{BackendAssignment_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{BackendAssignment_HostAddress}}/api/todos/todo
+Accept: application/json
+
+
+###
+
+GET {{BackendAssignment_HostAddress}}/api/todos/todo/2
+Accept: application/json
+
+
+###
+
+POST {{BackendAssignment_HostAddress}}/api/todos/todo
+Content-Type: application/json
+{
+    "Title": "Call head",
+    "Description": "Give him a call to give update",
+    "IsCompleted": false,
+    "UserId": 1
+}
+
+
+###
+
+PUT {{BackendAssignment_HostAddress}}/api/todos/todo/6
+Content-Type: application/json
+{
+    "Title": "Call HR",
+    "Description": "Give her a call to give update on candidates interview",
+    "IsCompleted": false,
+    "UserId": 1
+}
+
+
+###
+
+DELETE {{BackendAssignment_HostAddress}}/api/todos/todo/6
+Accept: application/json

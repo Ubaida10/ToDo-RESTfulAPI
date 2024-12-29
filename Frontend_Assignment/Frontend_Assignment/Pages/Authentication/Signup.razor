@@ -1,0 +1,41 @@
+﻿@* @page "/signup"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@using Frontend_Assignment.Model
+
+<h3>Sign Up</h3>
+
+<EditForm Model="signupModel" OnValidSubmit="HandleSignUp">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="signupModel.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <InputPassword id="password" class="form-control" @bind-Value="signupModel.PasswordHash" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+</EditForm>
+
+@code {
+    private User signupModel = new User();
+
+    private async Task HandleSignUp()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:5001/api/auth/signup", signupModel);
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            // Handle failure
+        }
+    }
+}
+ *@

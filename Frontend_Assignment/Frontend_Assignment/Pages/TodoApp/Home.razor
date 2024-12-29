@@ -1,0 +1,45 @@
+﻿@page "/home"
+@using Frontend_Assignment.Model
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+
+<h3>To Do List</h3>
+
+<button class="btn btn-primary" @onclick="NavigateToAdd">Add New To Do</button>
+
+<ul class="list-group mt-4">
+    @foreach (var todo in todos)
+    {
+        <li class="list-group-item">
+            @todo.Title
+            <button class="btn btn-info btn-sm float-end mx-2" @onclick="() => ViewTodoDetails(todo.Id)">View</button>
+            <button class="btn btn-warning btn-sm float-end mx-2" @onclick="() => EditTodo(todo.Id)">Edit</button>
+            <button class="btn btn-danger btn-sm float-end" @onclick="() => DeleteTodoItem(todo.Id)">Delete</button>
+        </li>
+    }
+</ul>
+
+@code {
+    private List<TodoItem> todos = new List<TodoItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        todos = await Http.GetFromJsonAsync<List<TodoItem>>("http://localhost:5177/api/todos/todo");
+    }
+
+    private void NavigateToAdd() => NavigationManager.NavigateTo("/add-todo");
+
+    private void EditTodo(int id) => NavigationManager.NavigateTo($"/edit-todo/{id}");
+
+    private void ViewTodoDetails(int id) => NavigationManager.NavigateTo($"/todo-details/{id}");
+
+    private async Task DeleteTodoItem(int id)
+    {
+        var response = await Http.DeleteAsync($"http://localhost:5177/api/todos/todo/{id}");
+        if (response.IsSuccessStatusCode)
+        {
+            todos = await Http.GetFromJsonAsync<List<TodoItem>>($"http://localhost:5177/api/todos/todo");
+        }
+    }
+}

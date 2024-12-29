@@ -1,0 +1,45 @@
+﻿@page "/add-todo"
+@using Frontend_Assignment.Model
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Add Todo</h3>
+
+<EditForm Model="todoItem" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <InputText id="title" class="form-control" @bind-Value="todoItem.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <InputText id="description" class="form-control" @bind-Value="todoItem.Description" />
+    </div>
+
+    <div class="mb-3">
+        <label for="isCompleted" class="form-label">Completed</label>
+        <InputCheckbox id="isCompleted" class="form-check-input" @bind-Value="todoItem.IsCompleted" />
+    </div>
+
+    <div class="mb-3">
+        <label for="userId" class="form-label">User Id</label>
+        <InputNumber id="userId" class="form-control" @bind-Value="todoItem.UserId" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    private TodoItem todoItem = new TodoItem();
+
+    private async Task HandleValidSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("http://localhost:5177/api/todos/todo", todoItem);
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/home");
+        }
+    }
+}

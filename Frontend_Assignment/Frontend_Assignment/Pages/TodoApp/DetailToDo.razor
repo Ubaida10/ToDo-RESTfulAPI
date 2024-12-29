@@ -1,0 +1,22 @@
+﻿@page "/todo-details/{id}"
+@inject HttpClient Http
+@using Frontend_Assignment.Model
+
+<h3>Todo Details</h3>
+
+<div>
+    <h4>@todoItem.Title</h4>
+    <p>@todoItem.Description</p>
+    <p><strong>Completed:</strong> @todoItem.IsCompleted</p>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; }
+    private TodoItem todoItem = new TodoItem();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        todoItem = await Http.GetFromJsonAsync<TodoItem>($"http://localhost:5177/api/todos/todo/{Id}");
+    }
+}
